@@ -24,6 +24,7 @@ async function getGenderRate(id: number) {
         }
         const data = await response.json();
         console.log(data.sexe);
+        console.log(data);
         return data.sexe;
     } catch (error) {
         console.error("Failed to fetch Pokémon data:", error);
