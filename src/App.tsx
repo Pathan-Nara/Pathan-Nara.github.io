@@ -9,7 +9,7 @@ interface Pokemon {
   sound: string;
   type: [string];
   gender?: string | null;
-  catchRate?: number;
+  catchRate: number;
 }
 
 
@@ -17,12 +17,21 @@ function App() {
   
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [isShiny, setIsShiny] = useState<boolean | null>(null);
-  const [isCaught, setIsCaught] = useState<boolean | null>(null);
+  const [pokemonTeam, setPokemonTeam] = useState<Pokemon[]>([]);
 
   function dropRate(rate: number) {
       const randomNum = Math.random() * 100;
       console.log("Random Number:", randomNum, "Rate:", rate, randomNum <= rate);
       return randomNum <= rate;
+    }
+
+    function capture(pokemonRate: number, ballRate: number = 150) { //taux de capture de la safari ball de base vu qu'on est dans un safari
+      const ball = Math.random() * ballRate;
+      if (ball <= pokemonRate) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
   async function getRandomPokemon() {
@@ -63,6 +72,21 @@ function App() {
     <>
       <div className="App">
         <h1>PokéSim</h1>
+        <div>
+          <h1>Pokemon Capturé :</h1>
+          <div className="pokemon-team">
+            {pokemonTeam.map((poke, index) => (
+              <div key={index} className="team-pokemon">
+                <h2>{poke.name}</h2>
+                <img src={poke.img} alt={poke.name} />
+                <button onClick={() => {
+                  const newTeam = pokemonTeam.filter((_, i) => i !== index);
+                  setPokemonTeam(newTeam);
+                }}>Relâcher</button>
+              </div>
+            ))}
+          </div>
+        </div>
         <button onClick={() => { getRandomPokemon(); console.log(pokemon); }}>Get Random Pokémon</button>
         <div className="pokemon-display">
           {pokemon && (
@@ -75,6 +99,19 @@ function App() {
             </>
           )}
         </div>
+        {(pokemon) && (
+          <div className="capture-section">
+            <button onClick={() => {
+              if(capture(pokemon.catchRate, 150)) {
+                pokemonTeam.push(pokemon);
+                setPokemonTeam([...pokemonTeam]);
+                console.log("Captured!");
+              } else {
+                console.log("Missed!");
+              }
+            }}>Capture</button>
+          </div>
+        )}
       </div>
     </>
   )
