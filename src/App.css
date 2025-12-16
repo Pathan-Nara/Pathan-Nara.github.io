@@ -174,8 +174,15 @@ button:hover:not(:disabled) {
   margin-top: auto;
 }
 
+.top-pokemon-team{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .fav-btn button {
-  background: transparent;
+  background: 0;
   border: none;
   padding: var(--spacing-sm);
 }
@@ -191,8 +198,45 @@ button:hover:not(:disabled) {
   transition: transform 0.2s;
 }
 
-.fav-btn button:hover svg {
-  transform: scale(1.1);
+
+
+
+.notif-btn button {
+  background: transparent;
+  border: none;
+  padding: var(--spacing-sm);
+}
+.notif-btn button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
+}
+.notif-btn svg {
+  color: var(--pokemon-yellow);
+  font-size: 1.5rem;
+  transition: transform 0.2s;
+}
+
+.show-favorites button {
+  background: transparent;
+  border: none;
+  padding: var(--spacing-sm);
+}
+.show-favorites button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
+}
+
+.show-favorites svg {
+  color: var(--pokemon-red);
+  font-size: 1.5rem;
+  transition: transform 0.2s;
+}
+
+.top{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .pokemon-display {
@@ -288,6 +332,14 @@ button:hover:not(:disabled) {
   width: 200px;
   height: 200px;
   margin: 0 auto var(--spacing-lg);
+}
+
+.pokemon-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  text-align: center;
 }
 
 .pokemon-sprite-container {

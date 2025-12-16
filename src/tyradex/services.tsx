@@ -32,4 +32,20 @@ async function getGenderRate(id: number) {
     }
 }
 
-export { getCatchRate, getGenderRate };
+async function getMaxHP(id: number) {
+    try {
+        const response = await fetch(`${api}pokemon/${id}`);;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data.stats);
+        const hpStat = data.stats.hp
+        return hpStat;
+    } catch (error) {
+        console.error("Failed to fetch Pokémon data:", error);
+        return null;
+    }
+}
+
+export { getCatchRate, getGenderRate, getMaxHP };
