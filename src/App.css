@@ -1,62 +1,24 @@
-/* === LAYOUT === */
 .App {
   max-width: 1400px;
   margin: 0 auto;
   padding: var(--spacing-lg);
-  min-height: 100vh;
 }
 
-/* === BUTTONS === */
 button {
-  background: linear-gradient(135deg, var(--pokemon-blue) 0%, var(--pokemon-blue-dark) 100%);
+  background: var(--pokemon-blue);
   color: var(--text-primary);
   border: 2px solid var(--pokemon-blue-dark);
-  box-shadow: var(--shadow-md);
 }
 
 button:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--pokemon-blue-dark) 0%, var(--pokemon-blue) 100%);
-  box-shadow: var(--shadow-lg), var(--shadow-glow-blue);
+  background: var(--pokemon-blue-dark);
   transform: translateY(-2px);
 }
 
-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
-}
-
-/* Secondary button variant */
-.button-secondary {
-  background: linear-gradient(135deg, var(--pokemon-yellow) 0%, #e6b800 100%);
-  color: var(--bg-primary);
-  border-color: #e6b800;
-}
-
-.button-secondary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #e6b800 0%, var(--pokemon-yellow) 100%);
-  box-shadow: var(--shadow-lg), var(--shadow-glow-yellow);
-}
-
-/* Danger button variant */
-.button-danger {
-  background: linear-gradient(135deg, var(--error) 0%, #b00824 100%);
-  border-color: #b00824;
-}
-
-.button-danger:hover:not(:disabled) {
-  background: linear-gradient(135deg, #b00824 0%, var(--error) 100%);
-  box-shadow: var(--shadow-lg), 0 0 20px rgba(220, 10, 45, 0.4);
-}
-
-/* === MODAL === */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(4px);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,9 +31,9 @@ button:active:not(:disabled) {
   to { opacity: 1; }
 }
 
-.modal .modal-content {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-  border: 3px solid var(--pokemon-blue);
+.modal-content {
+  background: var(--bg-secondary);
+  border: 2px solid var(--pokemon-blue);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   width: 90%;
@@ -79,95 +41,52 @@ button:active:not(:disabled) {
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-lg), var(--shadow-glow-blue);
-  position: relative;
   animation: slideUp 0.3s ease;
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.modal .modal-header {
+.modal-header {
   display: flex;
   justify-content: flex-end;
   margin-bottom: var(--spacing-md);
 }
 
-.modal .modal-header .close-button {
+.close-button {
   font-size: 1.5rem;
-  font-weight: bold;
-  padding: var(--spacing-xs) var(--spacing-md);
   background: var(--error);
-  color: white;
   border: 2px solid #b00824;
-  border-radius: var(--radius-md);
-  min-width: auto;
-  text-transform: none;
-  letter-spacing: normal;
+  padding: var(--spacing-xs) var(--spacing-md);
 }
 
-.modal .modal-header .close-button:hover {
+.close-button:hover:not(:disabled) {
   background: #b00824;
   transform: scale(1.05);
 }
 
-.modal .modal-body {
-  display: flex;
-  flex-direction: column;
+.modal-body {
   flex: 1;
-  overflow: hidden;
 }
 
-.modal .modal-body h2 {
+.modal-body h2 {
   color: var(--pokemon-yellow);
   text-align: center;
   margin-bottom: var(--spacing-sm);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-.modal .modal-body p {
-  text-align: center;
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-lg);
 }
 
 .modal .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-md);
-  width: 100%;
   max-height: calc(85vh - 200px);
   overflow-y: auto;
-  padding-right: var(--spacing-sm);
-  padding-bottom: var(--spacing-sm);
 }
 
-/* Custom scrollbar */
-.modal .grid::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal .grid::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-  border-radius: var(--radius-full);
-}
-
-.modal .grid::-webkit-scrollbar-thumb {
-  background: var(--pokemon-blue);
-  border-radius: var(--radius-full);
-}
-
-.modal .grid::-webkit-scrollbar-thumb:hover {
-  background: var(--pokemon-blue-dark);
-}
+.modal .grid::-webkit-scrollbar { width: 8px; }
+.modal .grid::-webkit-scrollbar-thumb { background: var(--pokemon-blue); }
 
 .modal .pokemon {
   background: var(--bg-card);
@@ -178,51 +97,36 @@ button:active:not(:disabled) {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-sm);
-  transition: all var(--transition-base);
+  transition: transform 0.2s;
 }
 
 .modal .pokemon:hover {
   background: var(--bg-card-hover);
   border-color: var(--pokemon-blue);
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md), var(--shadow-glow-blue);
 }
 
 .modal .pokemon h2 {
   font-size: 1.1rem;
-  margin: 0;
   color: var(--pokemon-yellow);
   text-transform: capitalize;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .modal .pokemon img {
   width: 80px;
   height: 80px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
-.modal .pokemon button {
-  width: 100%;
-  padding: var(--spacing-sm);
-  font-size: 0.9rem;
-}
-
-.header{
+.header, .pokemon-team-section {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.pokemon-team-section{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.pokemon-team-section {
   margin-top: var(--spacing-xl);
 }
 
-/* === POKEMON TEAM === */
 .pokemon-team {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -231,8 +135,8 @@ button:active:not(:disabled) {
   width: 100%;
 }
 
-.pokemon-team .team-pokemon {
-  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+.team-pokemon {
+  background: var(--bg-card);
   border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
@@ -240,106 +144,83 @@ button:active:not(:disabled) {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-md);
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
 }
 
-.pokemon-team .team-pokemon:hover {
-  background: linear-gradient(135deg, var(--bg-card-hover) 0%, var(--bg-card) 100%);
+.team-pokemon:hover {
+  background: var(--bg-card-hover);
   border-color: var(--pokemon-yellow);
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: var(--shadow-lg), var(--shadow-glow-yellow);
+  transform: translateY(-4px);
 }
 
-.pokemon-team .team-pokemon h2 {
+.team-pokemon h2 {
   font-size: 1.3rem;
-  margin: 0;
   color: var(--pokemon-yellow);
   text-transform: capitalize;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-.pokemon-team .team-pokemon img {
+.team-pokemon img {
   width: 96px;
   height: 96px;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
-  transition: transform var(--transition-base);
+  transition: transform 0.2s;
 }
 
-.pokemon-team .team-pokemon:hover img {
-  transform: scale(1.1) rotate(5deg);
+.team-pokemon:hover img {
+  transform: scale(1.05);
 }
 
-.pokemon-team .team-pokemon button {
+.team-pokemon button {
   width: 100%;
   margin-top: auto;
-}
-
-.fav-btn{
-  margin-bottom: var(--spacing-md);
 }
 
 .fav-btn button {
   background: transparent;
   border: none;
-  box-shadow: none;
   padding: var(--spacing-sm);
-  min-width: auto;
 }
 
 .fav-btn button:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: none;
-  box-shadow: none;
 }
 
-.fav-btn button svg {
+.fav-btn svg {
   color: var(--pokemon-red);
   font-size: 1.5rem;
-  transition: all var(--transition-base);
+  transition: transform 0.2s;
 }
 
 .fav-btn button:hover svg {
   transform: scale(1.1);
 }
 
-/* === POKEMON DISPLAY === */
 .pokemon-display {
-  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
-  border: 3px solid var(--pokemon-blue);
+  background: var(--bg-card);
+  border: 2px solid var(--pokemon-blue);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   margin: var(--spacing-xl) auto;
   max-width: 500px;
-  box-shadow: var(--shadow-lg), var(--shadow-glow-blue);
 }
 
 .pokemon-display h2 {
   color: var(--pokemon-yellow);
   text-transform: capitalize;
   font-size: 2rem;
-  margin-bottom: var(--spacing-md);
 }
 
 .pokemon-display img {
   width: 200px;
   height: 200px;
   margin: 0 auto var(--spacing-lg);
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
 }
 
 .pokemon-display p {
   font-size: 1.1rem;
-  color: var(--text-primary);
   margin: var(--spacing-sm) 0;
 }
 
-.pokemon-display p strong {
-  color: var(--pokemon-blue);
-}
-
-/* === CAPTURE SECTION === */
 .capture-section {
   margin: var(--spacing-xl) 0;
   text-align: center;
@@ -348,50 +229,16 @@ button:active:not(:disabled) {
 .capture-section button {
   font-size: 1.2rem;
   padding: var(--spacing-md) var(--spacing-2xl);
-  min-width: 200px;
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 768px) {
-  .App {
-    padding: var(--spacing-md);
-  }
-  
-  .modal .modal-content {
-    width: 95%;
-    padding: var(--spacing-lg);
-  }
-  
-  .modal .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
-  }
-  
-  .pokemon-team {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
-  }
-  
-  .pokemon-display {
-    padding: var(--spacing-lg);
-  }
-  
-  .pokemon-display img {
-    width: 150px;
-    height: 150px;
-  }
+  .App { padding: var(--spacing-md); }
+  .modal-content { width: 95%; padding: var(--spacing-lg); }
+  .modal .grid, .pokemon-team { grid-template-columns: repeat(2, 1fr); }
+  .pokemon-display { padding: var(--spacing-lg); }
+  .pokemon-display img { width: 150px; height: 150px; }
 }
 
 @media (max-width: 480px) {
-  .modal .grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .pokemon-team {
-    grid-template-columns: 1fr;
-  }
-  
-  h1 {
-    font-size: 1.8rem;
-  }
+  .modal .grid, .pokemon-team { grid-template-columns: 1fr; }
 }
