@@ -3,6 +3,7 @@ import { getPokemonById } from './pokeApi/services'
 import { getCatchRate, getGenderRate, getMaxHP } from './tyradex/services';
 import { FaHeart, FaRegHeart, FaBell  } from "react-icons/fa";
 import { dataStorage } from './storage/datastorage';
+import { requestPermission, sendNotification } from './notificationManager';
 
 import './App.css'
 
@@ -33,7 +34,10 @@ function App() {
   useEffect(() => {
     console.log("Counter depuis le useEffect:", counter);
     if(counter === 3 && !isCapturing){
-      console.log("Compteur à 3, le pokemon s'enfuit");
+      sendNotification('Le pokémon s\'est enfui !', {
+        body: `Vous avez échoué à capturer le pokemon... Dommage !`,
+        icon: pokemon ? pokemon.img : undefined,
+      });
       getRandomPokemon();
       setCounter(0);
     }
@@ -41,37 +45,75 @@ function App() {
 
   function dropRate(rate: number) {
       const randomNum = Math.random() * 100;
-      console.log("Random Number:", randomNum, "Rate:", rate, randomNum <= rate);
       return randomNum <= rate;
     }
   
-  function generateMessage(hpFactor: number, ball: number, pokemon: Pokemon) {
-    console.log(`Tentative de capture de ${pokemon.name} : HP Factor = ${hpFactor.toFixed(2)}, Ball Roll = ${ball.toFixed(2)}`);
+  function generateMessage(hpFactor: number, pokemon: Pokemon) {
+    const messages = [
+      "La balle a raté le pokémon !",
+      "Zut ! le pokémon s'est échappé !",
+      "Argh ! il semblait deja dedans !",
+      "Presque ! c'etait si proche !",
+    ];
+    let msg = "";
+    const W = Math.floor((((pokemon.catchRate*100)/255)*hpFactor)/255);
+    if (W < 10) {
+      msg = messages[0];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
+    } else if (W >= 10 && W < 30) {
+      msg = messages[1];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
+    } else if (W >= 30 && W < 70) {
+      msg = messages[2];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
+    }
+    else {
+      msg = messages[3];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
+    }
+    console.log(msg);
   }
 
-  function capture(pokemon: Pokemon, ballRate: number = 255) { //le taux de capture de la safari ball est de 150 de base (comme on est dans un safari) mais bon vu que la safari ball a le meme taux de capture que la hyper ball on va mettre le taux de capture de la pokeball pour rendre le jeu plus difficile mueheheh (PS c'est la vrai formule de capture sauf que on prends pas en compte les status du pokemon, les pv et tout le tralala donc la c'est comme si on essayait de capturer un pokemon au premier lancer)
+  function capture(pokemon: Pokemon, ballRate: number = 250) { //le taux de capture de la safari ball est de 150 de base (comme on est dans un safari) mais bon vu que la safari ball a le meme taux de capture que la hyper ball on va mettre le taux de capture de la pokeball pour rendre le jeu plus difficile mueheheh (PS c'est la vrai formule de capture sauf que on prends pas en compte les status du pokemon, les pv et tout le tralala donc la c'est comme si on essayait de capturer un pokemon au premier lancer)
     setCounter(prev => prev + 1);   //source : https://www.dragonflycave.com/mechanics/gen-i-capturing/
     console.log("Capture function called. Counter:", counter + 1);
     const R1 = Math.floor(Math.random() * (ballRate + 1));
     const hpFactor = Math.floor(Math.min((((pokemon.maxHp * 255)/12)/(pokemon.maxHp/4)), 255));
-
+    console.log("R1:", R1, "Catch Rate:", pokemon.catchRate, "HP Factor:", hpFactor);
     if(R1 >= pokemon.catchRate){
-      generateMessage(hpFactor, R1, pokemon);
+      generateMessage(hpFactor, pokemon);
       return false;
     }
     else{
       const R2 = Math.floor(Math.random() * 256);
+      console.log("R2:", R2, "HP Factor:", hpFactor);
       if(R2<=hpFactor){
+        sendNotification("Capture Réussie!", {
+          body: `Vous avez capturé ${pokemon.name}!`,
+          icon: pokemon.img,
+        });
         return true;
       }
       else{
-        generateMessage(hpFactor, R2, pokemon);
+        generateMessage(hpFactor, pokemon);
         return false;
       }
     }
   }
 
-  function tauxCapture(pokemon: Pokemon, ballRate: number = 255) {
+  function tauxCapture(pokemon: Pokemon, ballRate: number = 250) {
     const hpFactor = Math.floor(Math.min((((pokemon.maxHp * 255)/12)/(pokemon.maxHp/4)), 255));
     const probaR1 = pokemon.catchRate / (ballRate + 1);
     const probaR2 = hpFactor / 256;
@@ -133,7 +175,10 @@ function App() {
     const maxHp = await getMaxHP(randomId);
     const shiny = isShiny();
     if (shiny) {
-      console.log("Un shiny est apparu !");
+      sendNotification('UN POKEMON SHINY !!!!!!!!!!!!!!!!', {
+        body: `PRIMO GROUDON PRIMO KAYOGRE MEGAGAY RAYKAZA TOU CHAYNER !!!!!!`,
+        icon: pokemonData.sprites.front_shiny,
+      });
     }
     const genders = await getGenderRate(randomId);
 
@@ -171,7 +216,15 @@ function App() {
     <div className='modal'>
       <div className='modal-content'>
         <div className='modal-header'>
-          <button className='close-button' onClick={() => { setShowModal(false); getRandomPokemon(); }} aria-label="Fermer">&times;</button>
+            <button
+            className='close-button'
+            onClick={() => {
+              setShowModal(false);
+              counter !== 0 ? getRandomPokemon() : null;
+              setCounter(0);
+            }}
+            aria-label="Fermer"
+            >&times;</button>
         </div>
         <div className='modal-body'>
           <h2>Équipe Complète!</h2>
@@ -241,9 +294,9 @@ function App() {
           <div className='top'>
             <button className='show-favorites' onClick={() => setShowModalFavorites(true)}><FaHeart /></button>
             <h1>PokéSim</h1>
-            <button className='notif-btn'><FaBell /></button>
+            <button className='notif-btn' onClick={() => requestPermission()}><FaBell /></button>
           </div>
-          <button onClick={() => { getRandomPokemon(); console.log("Random Pokémon generated"); console.log(pokemon)}}>Rencontre</button>
+          <button onClick={() => { getRandomPokemon(); setCounter(0); console.log("Random Pokémon generated"); console.log(pokemon)}}>Rencontre</button>
         </div>          
           {pokemon && (
 
@@ -271,7 +324,7 @@ function App() {
                   {isCapturing && captureResult && (
                     <div className="pokeball-overlay">
                       <img 
-                        src="src/assets/img/safariball.png" 
+                        src="../public/img/safariball.png" 
                         alt="Pokeball" 
                         className={`pokeball-capture ${captureResult}`}
                       />
@@ -288,7 +341,7 @@ function App() {
         {(pokemon && !isCapturing) && (
           <div className="capture-section">
             <button onClick={async () => {
-              const captureSuccess = capture(pokemon, 255);
+              const captureSuccess = capture(pokemon);
               
               
               setIsCapturing(true);
@@ -300,6 +353,12 @@ function App() {
               if(captureSuccess) {
                 
                 await new Promise(resolve => setTimeout(resolve, 300)); 
+
+                sendNotification('Capture Réussie!', {
+                  body: `Vous avez capturé ${pokemon.name}!`,
+                  icon: pokemon.img,
+                });
+                setCounter(0);
                 
                 if (pokemonTeam.length < 6) {
                   setPokemonTeam([...pokemonTeam, pokemon]);
