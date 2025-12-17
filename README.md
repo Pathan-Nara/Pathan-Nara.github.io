@@ -24,3 +24,8 @@ Et voila !
 
 Sinon vous pouvez acceder a la version en ligne ici : https://pathan-nara.github.io/PokeSim/
 
+## Difficultés
+
+ALORS
+
+- Bon gros probleme de notifs... normalement tout fonctionne bien par contre n'activez pas les notifications sur telephone car je ne sais pour quel raison mais ca fait crash litteralement l'appli (par contre ca affiche les notifs) mais en gros ca fait crash les animations et ca freeze l'app quand un nouveau pokemon apparait voilaaaaaa sinon sur pc ca fonctionne nikel bref have fun !
