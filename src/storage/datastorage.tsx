@@ -16,6 +16,17 @@ export const dataStorage = {
     loadTeam: (): any[] => {
         const data = localStorage.getItem('pokemonTeam');
         return data ? JSON.parse(data) : [];
-    }
+    },
 
+    saveTheme: (theme: string) => {
+        localStorage.setItem('theme', theme);
+    },
+
+    loadTheme: (): string => {
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'dark');
+        }
+        const theme = localStorage.getItem('theme');
+        return theme ? theme : 'light';
+    }
 }

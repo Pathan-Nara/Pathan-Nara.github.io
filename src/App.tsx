@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getPokemonById } from './pokeApi/services'
 import { getCatchRate, getGenderRate, getMaxHP } from './tyradex/services';
-import { FaHeart, FaRegHeart, FaBell  } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaBell, FaMoon, FaSun  } from "react-icons/fa";
 import { dataStorage } from './storage/datastorage';
 import { requestPermission, sendNotification } from './notificationManager';
 
@@ -30,6 +30,7 @@ function App() {
   const [userFavorite, setUserFavorite] = useState<Pokemon[]>(dataStorage.loadFavorites());
   const [isCapturing, setIsCapturing] = useState<boolean>(false);
   const [captureResult, setCaptureResult] = useState<'success' | 'fail' | null>(null);
+  const [theme, setTheme] = useState<string>(dataStorage.loadTheme());
 
   useEffect(() => {
     console.log("Counter depuis le useEffect:", counter);
@@ -86,7 +87,7 @@ function App() {
     console.log(msg);
   }
 
-  function capture(pokemon: Pokemon, ballRate: number = 250) { //le taux de capture de la safari ball est de 150 de base (comme on est dans un safari) mais bon vu que la safari ball a le meme taux de capture que la hyper ball on va mettre le taux de capture de la pokeball pour rendre le jeu plus difficile mueheheh (PS c'est la vrai formule de capture sauf que on prends pas en compte les status du pokemon, les pv et tout le tralala donc la c'est comme si on essayait de capturer un pokemon au premier lancer)
+  function capture(pokemon: Pokemon, ballRate: number = 150) { //le taux de capture de la safari ball est de 150 de base (comme on est dans un safari) mais bon vu que la safari ball a le meme taux de capture que la hyper ball on va mettre le taux de capture de la pokeball pour rendre le jeu plus difficile mueheheh (PS c'est la vrai formule de capture sauf que on prends pas en compte les status du pokemon, les pv et tout le tralala donc la c'est comme si on essayait de capturer un pokemon au premier lancer)
     setCounter(prev => prev + 1);   //source : https://www.dragonflycave.com/mechanics/gen-i-capturing/
     console.log("Capture function called. Counter:", counter + 1);
     const R1 = Math.floor(Math.random() * (ballRate + 1));
@@ -95,7 +96,7 @@ function App() {
     if(R1 >= pokemon.catchRate){
       generateMessage(hpFactor, pokemon);
       return false;
-    }
+    } 
     else{
       const R2 = Math.floor(Math.random() * 256);
       console.log("R2:", R2, "HP Factor:", hpFactor);
@@ -113,7 +114,7 @@ function App() {
     }
   }
 
-  function tauxCapture(pokemon: Pokemon, ballRate: number = 250) {
+  function tauxCapture(pokemon: Pokemon, ballRate: number = 150) {
     const hpFactor = Math.floor(Math.min((((pokemon.maxHp * 255)/12)/(pokemon.maxHp/4)), 255));
     const probaR1 = pokemon.catchRate / (ballRate + 1);
     const probaR2 = hpFactor / 256;
@@ -294,7 +295,19 @@ function App() {
           <div className='top'>
             <button className='show-favorites' onClick={() => setShowModalFavorites(true)}><FaHeart /></button>
             <h1>PokéSim</h1>
-            <button className='notif-btn' onClick={() => requestPermission()}><FaBell /></button>
+            <div className='btn-lay'>
+              <button className='theme-btn' onClick={() => {
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+                dataStorage.saveTheme(newTheme);
+                document.body.className = newTheme;
+              }}>
+                {theme === 'light' ? <FaMoon /> : <FaSun />}
+              </button>
+              <div className='notif-btn'>
+                <button onClick={() => requestPermission()}><FaBell /></button>
+              </div>
+            </div>
           </div>
           <button onClick={() => { getRandomPokemon(); setCounter(0); console.log("Random Pokémon generated"); console.log(pokemon)}}>Rencontre</button>
         </div>          
@@ -324,7 +337,7 @@ function App() {
                   {isCapturing && captureResult && (
                     <div className="pokeball-overlay">
                       <img 
-                        src="../public/img/safariball.png" 
+                        src="./img/safariball.png" 
                         alt="Pokeball" 
                         className={`pokeball-capture ${captureResult}`}
                       />

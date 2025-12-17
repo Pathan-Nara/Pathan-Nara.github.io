@@ -13,6 +13,26 @@
   --border-color: #404040;
   --error: var(--pokemon-red);
   
+
+body.light {
+  --bg-primary: #f7f7f7;
+  --bg-secondary: #ffffff;
+  --bg-card: #f3f3f3;
+  --bg-card-hover: #eaeaea;
+  --text-primary: #181818;
+  --text-secondary: #444444;
+  --border-color: #cccccc;
+}
+
+body.dark {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-card: #1f1f1f;
+  --bg-card-hover: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --border-color: #404040;
+}
   /* Spacing & Radius */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;

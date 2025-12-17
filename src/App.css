@@ -11,9 +11,29 @@ button {
 }
 
 button:hover:not(:disabled) {
-  background: var(--pokemon-blue-dark);
   transform: translateY(-2px);
 }
+
+.btn-lay{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.theme-btn {
+  background: transparent;
+  border: none;
+  padding: var(--spacing-sm);
+}
+
+.theme-btn svg {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  transition: transform 0.2s;
+}
+
 
 .modal {
   position: fixed;
@@ -202,13 +222,12 @@ button:hover:not(:disabled) {
 
 
 .notif-btn button {
-  background: transparent;
+  background: 0;
   border: none;
   padding: var(--spacing-sm);
 }
 .notif-btn button:hover {
   background: rgba(255, 255, 255, 0.1);
-  transform: none;
 }
 .notif-btn svg {
   color: var(--pokemon-yellow);
