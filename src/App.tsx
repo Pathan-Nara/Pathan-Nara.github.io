@@ -60,13 +60,29 @@ function App() {
     const W = Math.floor((((pokemon.catchRate*100)/255)*hpFactor)/255);
     if (W < 10) {
       msg = messages[0];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
     } else if (W >= 10 && W < 30) {
       msg = messages[1];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
     } else if (W >= 30 && W < 70) {
       msg = messages[2];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
     }
     else {
       msg = messages[3];
+      sendNotification('Capture échouée', {
+        body: msg,
+        icon: pokemon.img,
+      });
     }
     console.log(msg);
   }
@@ -85,10 +101,10 @@ function App() {
       const R2 = Math.floor(Math.random() * 256);
       console.log("R2:", R2, "HP Factor:", hpFactor);
       if(R2<=hpFactor){
-        // sendNotification("Capture Réussie!", {
-        //   body: `Vous avez capturé ${pokemon.name}!`,
-        //   icon: pokemon.img,
-        // });
+        sendNotification("Capture Réussie!", {
+          body: `Vous avez capturé ${pokemon.name}!`,
+          icon: pokemon.img,
+        });
         return true;
       }
       else{
