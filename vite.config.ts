@@ -38,7 +38,11 @@ export default defineConfig({
             type: "image/png",
             purpose: "maskable"
           }
-        ],
+        ]
+      },
+      workbox: {
+        navigateFallback: "/index.html",
+        globPatterns: ["**/*.{js,css,html,png,svg,ico,json}"]
       },
     }),
   ],
